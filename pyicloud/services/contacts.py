@@ -63,6 +63,7 @@ class ContactsService(object):
         params_next = dict(self.params)
         params_next.update({
             'limit': limit,
+            'locale': 'en_US',
             'offset': 0,
             'order': 'last,first',
             'clientVersion': '2.1',
