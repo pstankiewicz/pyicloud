@@ -56,28 +56,7 @@ class ContactsService(object):
         Method is implemented based on https://github.com/picklepete/pyicloud/issues/103
         """
 
-        params_contacts = dict(self.params)
-        params_contacts.update({
-            'clientVersion': '2.1',
-            'locale': 'en_US',
-            'order': 'last,first',
-        })
-        req = self.session.get(
-            self._contacts_refresh_url,
-            params=params_contacts
-        )
-        self.response = req.json()
-        params_refresh = dict(params_contacts)
-        params_refresh.update({
-            'prefToken': req.json()["prefToken"],
-            'syncToken': req.json()["syncToken"],
-        })
-        self.session.post(self._contacts_changeset_url, params=params_refresh)
-        req = self.session.get(
-            self._contacts_refresh_url,
-            params=params_contacts
-        )
-        self.response = req.json()
+        self.refresh_client()
 
         _contacts_next_url = '%s/contacts' % self._contacts_endpoint
         limit = 500
@@ -87,8 +66,8 @@ class ContactsService(object):
             'offset': 0,
             'order': 'last,first',
             'clientVersion': '2.1',
-            'prefToken': req.json()['prefToken'],
-            'syncToken': req.json()['syncToken']
+            'prefToken': self.response['prefToken'],
+            'syncToken': self.response['syncToken']
         })
         contacts = []
         while True:
