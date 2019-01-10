@@ -1,14 +1,11 @@
 from __future__ import absolute_import
-import os
-import uuid
-from datetime import datetime
-from calendar import monthrange
 
 
 class ContactsService(object):
     """
     The 'Contacts' iCloud service, connects to iCloud and returns contacts.
     """
+
     def __init__(self, service_root, session, params):
         self.session = session
         self.params = params
@@ -33,7 +30,7 @@ class ContactsService(object):
             params=params_contacts
         )
         self.response = req.json()
-        params_refresh = dict(self.params)
+        params_refresh = dict(params_contacts)
         params_refresh.update({
             'prefToken': req.json()["prefToken"],
             'syncToken': req.json()["syncToken"],
